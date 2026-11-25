@@ -1,0 +1,18 @@
+<section class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card"><div class="card-body p-4">
+        <h1 class="h3 mb-4">Mon profil</h1>
+        <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+        <form (ngSubmit)="update()">
+          <div class="mb-3"><label class="form-label">Nom</label><input class="form-control" [(ngModel)]="nom" name="nom"></div>
+          <div class="mb-3"><label class="form-label">Prénom</label><input class="form-control" [(ngModel)]="prenom" name="prenom"></div>
+          <div class="mb-3"><label class="form-label">Téléphone</label><input class="form-control" [(ngModel)]="telephone" name="telephone"></div>
+          <button class="btn btn-success" type="submit">Mettre à jour</button>
+          <button class="btn btn-outline-danger ms-2" type="button" (click)="logout()">Se déconnecter</button>
+        </form>
+      </div></div>
+    </div>
+  </div>
+</section>

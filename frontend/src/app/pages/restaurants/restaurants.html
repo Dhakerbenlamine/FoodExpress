@@ -1,0 +1,49 @@
+<section class="container py-5">
+  <h1 class="h2 mb-4">Restaurants</h1>
+  <div class="card mb-4">
+    <div class="card-body row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Nom</label>
+        <input class="form-control" [(ngModel)]="nom" (ngModelChange)="page=1">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Type de cuisine</label>
+        <input class="form-control" [(ngModel)]="typeCuisine" (ngModelChange)="page=1" placeholder="Pizza, Tunisien...">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">État</label>
+        <select class="form-select" [(ngModel)]="isOpen" (ngModelChange)="page=1">
+          <option value="">Tous</option>
+          <option value="true">Ouverts</option>
+          <option value="false">Fermés</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-success w-100" (click)="load()">Filtrer</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">Chargement...</div>
+  <div class="row g-4" *ngIf="!loading">
+    <div class="col-md-6 col-lg-4" *ngFor="let restaurant of restaurants">
+      <article class="card restaurant-card h-100">
+        <div class="card-body">
+          <span class="badge" [class.text-bg-success]="restaurant.isOpen" [class.text-bg-secondary]="!restaurant.isOpen">
+            {{ restaurant.isOpen ? 'Ouvert' : 'Fermé' }}
+          </span>
+          <h2 class="h5 mt-2">{{ restaurant.nom }}</h2>
+          <p>{{ restaurant.description }}</p>
+          <p class="text-secondary small">{{ restaurant.adresse }}</p>
+          <a class="btn btn-outline-success" [routerLink]="['/restaurants', restaurant._id]">Voir le menu</a>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <nav class="mt-4 d-flex justify-content-center gap-2">
+    <button class="btn btn-outline-success" (click)="changePage(page-1)" [disabled]="page<=1">Précédent</button>
+    <span class="btn btn-light disabled">Page {{ page }} / {{ totalPages }}</span>
+    <button class="btn btn-outline-success" (click)="changePage(page+1)" [disabled]="page>=totalPages">Suivant</button>
+  </nav>
+</section>
