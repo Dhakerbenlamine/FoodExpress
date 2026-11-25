@@ -1,0 +1,131 @@
+{
+  "info": {
+    "name": "FoodExpress - Partie 2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api" },
+    { "key": "clientToken", "value": "" },
+    { "key": "ownerToken", "value": "" },
+    { "key": "adminToken", "value": "" },
+    { "key": "restaurantId", "value": "" },
+    { "key": "categoryId", "value": "" },
+    { "key": "dishId", "value": "" },
+    { "key": "orderId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Login restaurateur",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"restaurateur@foodexpress.local\",\n  \"password\": \"Restaurateur123!\"\n}"
+        },
+        "url": "{{baseUrl}}/auth/login"
+      }
+    },
+    {
+      "name": "Liste restaurants",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/restaurants?nom=Pizza&typeCuisine=Italienne&isOpen=true&page=1&limit=10"
+      }
+    },
+    {
+      "name": "Liste plats",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/dishes?restaurant={{restaurantId}}&page=1&limit=10"
+      }
+    },
+    {
+      "name": "Login client",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"client@foodexpress.local\",\n  \"password\": \"Client123!\"\n}"
+        },
+        "url": "{{baseUrl}}/auth/login"
+      }
+    },
+    {
+      "name": "Créer commande",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{clientToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"restaurant\": \"{{restaurantId}}\",\n  \"adresseLivraison\": \"Avenue Habib Bourguiba\",\n  \"modePaiement\": \"livraison\",\n  \"remarque\": \"Sans oignons\",\n  \"articles\": [\n    { \"plat\": \"{{dishId}}\", \"quantite\": 2 }\n  ]\n}"
+        },
+        "url": "{{baseUrl}}/orders"
+      }
+    },
+    {
+      "name": "Mes commandes",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{clientToken}}" }],
+        "url": "{{baseUrl}}/orders/my-orders"
+      }
+    },
+    {
+      "name": "Accepter commande",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{ownerToken}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{ \"statut\": \"acceptee\" }" },
+        "url": "{{baseUrl}}/orders/{{orderId}}/status"
+      }
+    },
+    {
+      "name": "Passer en préparation",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{ownerToken}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{ \"statut\": \"en_preparation\" }" },
+        "url": "{{baseUrl}}/orders/{{orderId}}/status"
+      }
+    },
+    {
+      "name": "Passer en livraison",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{ownerToken}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{ \"statut\": \"en_livraison\" }" },
+        "url": "{{baseUrl}}/orders/{{orderId}}/status"
+      }
+    },
+    {
+      "name": "Statistiques restaurateur",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{ownerToken}}" }],
+        "url": "{{baseUrl}}/restaurant-stats"
+      }
+    },
+    {
+      "name": "Statistiques admin",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": "{{baseUrl}}/admin/stats"
+      }
+    }
+  ]
+}
