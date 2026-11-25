@@ -1,0 +1,24 @@
+<section class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Tableau de bord restaurateur</h1>
+    <div class="d-flex gap-2">
+      <a class="btn btn-outline-success" routerLink="/restaurant-dashboard/dishes">Plats</a>
+      <a class="btn btn-outline-success" routerLink="/restaurant-dashboard/orders">Commandes</a>
+    </div>
+  </div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div class="row g-3" *ngIf="stats">
+    <div class="col-sm-6 col-lg-3"><div class="card text-center"><div class="card-body"><h2 class="h6">Commandes</h2><strong class="h3">{{ stats.totalCommandes }}</strong></div></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="card text-center"><div class="card-body"><h2 class="h6">En attente</h2><strong class="h3">{{ stats.commandesEnAttente }}</strong></div></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="card text-center"><div class="card-body"><h2 class="h6">Acceptées</h2><strong class="h3">{{ stats.commandesAcceptees }}</strong></div></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="card text-center"><div class="card-body"><h2 class="h6">Chiffre d’affaires</h2><strong class="h3">{{ stats.chiffreAffaires }} DT</strong></div></div></div>
+  </div>
+  <div class="card mt-4">
+    <div class="card-body">
+      <h2 class="h5">Plats les plus commandés</h2>
+      <div *ngFor="let plat of stats?.platsLesPlusCommandes" class="d-flex justify-content-between border-bottom py-2">
+        <span>{{ plat.nom }}</span><strong>{{ plat.quantiteTotale }}</strong>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,16 @@
+<section class="container py-5">
+  <h1 class="h2 mb-4">Gestion des utilisateurs</h1>
+  <div class="input-group mb-4">
+    <input class="form-control" [(ngModel)]="search" placeholder="Rechercher par nom ou email">
+    <button class="btn btn-success" (click)="load()">Rechercher</button>
+  </div>
+  <div class="table-responsive card">
+    <table class="table mb-0"><thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Actif</th><th>Action</th></tr></thead>
+      <tbody><tr *ngFor="let user of users">
+        <td>{{ user.nom }} {{ user.prenom }}</td><td>{{ user.email }}</td><td>{{ user.role }}</td>
+        <td><span class="badge" [class.text-bg-success]="user.isActive" [class.text-bg-danger]="!user.isActive">{{ user.isActive ? 'Oui' : 'Non' }}</span></td>
+        <td><button class="btn btn-sm" [class.btn-outline-danger]="user.isActive" [class.btn-outline-success]="!user.isActive" (click)="toggle(user)">{{ user.isActive ? 'Désactiver' : 'Activer' }}</button></td>
+      </tr></tbody>
+    </table>
+  </div>
+</section>

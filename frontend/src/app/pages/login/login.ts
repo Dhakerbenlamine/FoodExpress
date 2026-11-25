@@ -23,7 +23,14 @@ export class Login {
     this.auth.login(this.email, this.password).subscribe({
       next: () => {
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-        this.router.navigateByUrl(returnUrl || '/');
+        if (returnUrl) {
+          this.router.navigateByUrl(returnUrl);
+          return;
+        }
+        const role = this.auth.getUser()?.role;
+        if (role === 'admin') this.router.navigate(['/admin-dashboard/statistics']);
+        else if (role === 'restaurateur') this.router.navigate(['/restaurant-dashboard']);
+        else this.router.navigate(['/']);
       },
       error: (error) => { this.error = error.error?.message || 'Connexion impossible.'; }
     });

@@ -12,6 +12,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const statsController = require("./controllers/statsController");
 const authMiddleware = require("./middleware/authMiddleware");
 const roleMiddleware = require("./middleware/roleMiddleware");
+const restaurantController = require("./controllers/restaurantController");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,6 +34,12 @@ app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/dishes", dishRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/categories", categoryRoutes);
+app.get(
+  "/api/admin/restaurants",
+  authMiddleware,
+  roleMiddleware("admin"),
+  restaurantController.getAdminRestaurants
+);
 app.get(
   "/api/admin/stats",
   authMiddleware,
