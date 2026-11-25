@@ -1,0 +1,28 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+:root {
+  --foodexpress-primary: #198754;
+  --foodexpress-dark: #173f35;
+}
+
+body {
+  min-height: 100vh;
+  background: #f8f9fa;
+  color: #212529;
+}
+
+.main-content {
+  min-height: calc(100vh - 160px);
+}
+
+.restaurant-card,
+.dish-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.restaurant-card:hover,
+.dish-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12);
+}

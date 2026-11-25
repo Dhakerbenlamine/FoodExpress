@@ -1,0 +1,34 @@
+<section class="bg-success text-white py-5">
+  <div class="container py-4">
+    <h1 class="display-5 fw-bold">Vos repas préférés, livrés chez vous</h1>
+    <p class="lead">Découvrez les meilleurs restaurants près de chez vous.</p>
+    <form class="d-flex gap-2 max-search" (submit)="search($event)">
+      <input class="form-control form-control-lg" [(ngModel)]="searchText" name="search" placeholder="Rechercher un restaurant">
+      <button class="btn btn-warning btn-lg" type="submit">Rechercher</button>
+    </form>
+  </div>
+</section>
+
+<section class="container py-5">
+  <h2 class="h4 mb-3">Catégories de cuisine</h2>
+  <div class="d-flex flex-wrap gap-2 mb-5">
+    <button *ngFor="let cuisine of cuisines" class="btn btn-outline-success" (click)="filterCuisine(cuisine)">{{ cuisine }}</button>
+  </div>
+
+  <h2 class="h4 mb-3">Restaurants populaires</h2>
+  <div *ngIf="loading" class="text-center py-4">Chargement...</div>
+  <div class="row g-4" *ngIf="!loading">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let restaurant of restaurants">
+      <article class="card restaurant-card h-100">
+        <div class="card-body">
+          <span class="badge text-bg-success mb-2">{{ restaurant.isOpen ? 'Ouvert' : 'Fermé' }}</span>
+          <h3 class="h5 card-title">{{ restaurant.nom }}</h3>
+          <p class="card-text">{{ restaurant.description }}</p>
+          <p class="small text-secondary mb-1">{{ restaurant.typeCuisine }}</p>
+          <p class="small mb-3">Livraison : {{ restaurant.fraisLivraison }} DT</p>
+          <a class="btn btn-success" [routerLink]="['/restaurants', restaurant._id]">Voir le menu</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

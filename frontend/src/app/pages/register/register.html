@@ -1,0 +1,21 @@
+<section class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm"><div class="card-body p-4">
+        <h1 class="h3 mb-4">Créer un compte</h1>
+        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+        <form (ngSubmit)="submit()">
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label">Nom</label><input class="form-control" [(ngModel)]="nom" name="nom" required></div>
+            <div class="col-md-6"><label class="form-label">Prénom</label><input class="form-control" [(ngModel)]="prenom" name="prenom" required></div>
+            <div class="col-md-6"><label class="form-label">Email</label><input type="email" class="form-control" [(ngModel)]="email" name="email" required></div>
+            <div class="col-md-6"><label class="form-label">Téléphone</label><input class="form-control" [(ngModel)]="telephone" name="telephone" required></div>
+            <div class="col-md-6"><label class="form-label">Mot de passe</label><input type="password" class="form-control" [(ngModel)]="password" name="password" required></div>
+            <div class="col-md-6"><label class="form-label">Confirmation</label><input type="password" class="form-control" [(ngModel)]="confirmation" name="confirmation" required></div>
+          </div>
+          <button class="btn btn-success w-100 mt-4" type="submit">S'inscrire</button>
+        </form>
+      </div></div>
+    </div>
+  </div>
+</section>
