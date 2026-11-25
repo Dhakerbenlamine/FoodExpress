@@ -5,6 +5,13 @@ const cors = require("cors");
 const connectDatabase = require("./config/database");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const restaurantRoutes = require("./routes/restaurantRoutes");
+const dishRoutes = require("./routes/dishRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const statsController = require("./controllers/statsController");
+const authMiddleware = require("./middleware/authMiddleware");
+const roleMiddleware = require("./middleware/roleMiddleware");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +29,22 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/restaurants", restaurantRoutes);
+app.use("/api/dishes", dishRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/categories", categoryRoutes);
+app.get(
+  "/api/admin/stats",
+  authMiddleware,
+  roleMiddleware("admin"),
+  statsController.getAdminStats
+);
+app.get(
+  "/api/restaurant-stats",
+  authMiddleware,
+  roleMiddleware("restaurateur", "admin"),
+  statsController.getRestaurantStats
+);
 
 // Route inconnue : réponse JSON cohérente avec le reste de l'API.
 app.use((req, res) => {
