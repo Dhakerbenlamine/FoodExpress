@@ -41,6 +41,31 @@ exports.getRestaurants = async (req, res, next) => {
   }
 };
 
+exports.getAdminRestaurants = async (req, res, next) => {
+  try {
+    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+    const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 10, 1), 100);
+    const filtre = {};
+    if (req.query.statutValidation) {
+      filtre.statutValidation = req.query.statutValidation;
+    }
+    const [restaurants, total] = await Promise.all([
+      Restaurant.find(filtre)
+        .populate("owner", "nom prenom email")
+        .sort({ nom: 1 })
+        .skip((page - 1) * limit)
+        .limit(limit),
+      Restaurant.countDocuments(filtre)
+    ]);
+    res.json({
+      restaurants,
+      pagination: { page, limit, total, pages: Math.ceil(total / limit) }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getRestaurantById = async (req, res, next) => {
   try {
     if (!mongoose.isValidObjectId(req.params.id)) {

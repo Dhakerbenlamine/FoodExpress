@@ -1,0 +1,14 @@
+<section class="container py-5">
+  <h1 class="h2 mb-4">Gestion des restaurants</h1>
+  <div class="card"><div class="table-responsive"><table class="table mb-0">
+    <thead><tr><th>Nom</th><th>Type</th><th>Ouvert</th><th>Validation</th><th>Action</th></tr></thead>
+    <tbody><tr *ngFor="let restaurant of restaurants">
+      <td>{{ restaurant.nom }}</td><td>{{ restaurant.typeCuisine }}</td><td>{{ restaurant.isOpen ? 'Oui' : 'Non' }}</td>
+      <td>{{ restaurant.statutValidation }}</td>
+      <td>
+        <button *ngIf="restaurant.statutValidation==='suspendue'" class="btn btn-sm btn-success" (click)="setValidation(restaurant,'validee')">Valider</button>
+        <button *ngIf="restaurant.statutValidation==='validee'" class="btn btn-sm btn-outline-danger" (click)="setValidation(restaurant,'suspendue')">Suspendre</button>
+      </td>
+    </tr></tbody>
+  </table></div></div>
+</section>

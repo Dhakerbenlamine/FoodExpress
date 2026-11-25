@@ -1,0 +1,30 @@
+<section class="container py-5">
+  <h1 class="h2 mb-4">Gestion des plats</h1>
+  <div *ngIf="message" class="alert alert-info">{{ message }}</div>
+  <div class="card mb-4"><div class="card-body row g-3">
+    <div class="col-md-4"><input class="form-control" [(ngModel)]="form.nom" placeholder="Nom du plat"></div>
+    <div class="col-md-3"><input type="number" min="0" class="form-control" [(ngModel)]="form.prix" placeholder="Prix"></div>
+    <div class="col-md-3">
+      <select class="form-select" [(ngModel)]="form.categorie">
+        <option value="">Catégorie</option>
+        <option *ngFor="let category of categories" [value]="category._id">{{ category.nom }}</option>
+      </select>
+    </div>
+    <div class="col-md-2"><button class="btn btn-success w-100" (click)="save()">{{ editingId ? 'Modifier' : 'Ajouter' }}</button></div>
+  </div></div>
+  <div class="card"><div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>Nom</th><th>Prix</th><th>Disponible</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let dish of dishes">
+          <td>{{ dish.nom }}</td><td>{{ dish.prix }} DT</td>
+          <td><span class="badge" [class.text-bg-success]="dish.disponible" [class.text-bg-secondary]="!dish.disponible">{{ dish.disponible ? 'Oui' : 'Non' }}</span></td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="edit(dish)">Modifier</button>
+            <button class="btn btn-sm btn-outline-danger" (click)="remove(dish)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div></div>
+</section>
