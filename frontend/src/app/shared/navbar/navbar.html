@@ -18,7 +18,7 @@
         <a *ngIf="!user" class="btn btn-outline-light" routerLink="/register">Inscription</a>
         <a *ngIf="user" class="btn btn-outline-light" routerLink="/my-orders">Mes commandes</a>
         <a *ngIf="user?.role==='restaurateur' || user?.role==='admin'" class="btn btn-warning" routerLink="/restaurant-dashboard">Gestion</a>
-        <a *ngIf="user?.role==='admin'" class="btn btn-outline-warning" routerLink="/admin-dashboard">Admin</a>
+        <a *ngIf="user?.role==='admin'" class="btn btn-outline-warning" routerLink="/admin-dashboard/users">Admin</a>
         <a *ngIf="user" class="btn btn-light" routerLink="/profile">{{ user.prenom }}</a>
       </div>
     </div>

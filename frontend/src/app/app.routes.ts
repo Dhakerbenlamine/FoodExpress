@@ -43,7 +43,7 @@ export const routes: Routes = [
     canActivate: [authGuardGuard, roleGuardGuard],
     data: { roles: ['admin'] },
     children: [
-      { path: '', redirectTo: 'statistics', pathMatch: 'full' },
+      { path: '', redirectTo: 'users', pathMatch: 'full' },
       { path: 'users', component: Users },
       { path: 'restaurants', component: AdminRestaurants },
       { path: 'categories', component: Categories },

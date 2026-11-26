@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { Admin } from '../../core/services/admin/admin';
+import { AdminNav } from '../../shared/admin-nav/admin-nav';
 
 @Component({
   selector: 'app-restaurants',
-  imports: [NgFor, NgIf],
+  imports: [NgFor, NgIf, AdminNav],
   templateUrl: './restaurants.html',
   styleUrl: './restaurants.css',
 })

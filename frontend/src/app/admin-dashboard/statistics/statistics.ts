@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Admin } from '../../core/services/admin/admin';
+import { AdminNav } from '../../shared/admin-nav/admin-nav';
 
 @Component({
   selector: 'app-statistics',
-  imports: [NgIf],
+  imports: [NgIf, AdminNav],
   templateUrl: './statistics.html',
   styleUrl: './statistics.css',
 })

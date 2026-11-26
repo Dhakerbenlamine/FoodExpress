@@ -1,4 +1,5 @@
 <section class="container py-5">
+  <app-admin-nav></app-admin-nav>
   <h1 class="h2 mb-4">Gestion des catégories</h1>
   <div class="card mb-4"><div class="card-body row g-3">
     <div class="col-md-4"><select class="form-select" [(ngModel)]="restaurantId"><option value="">Restaurant</option><option *ngFor="let restaurant of restaurants" [value]="restaurant._id">{{ restaurant.nom }}</option></select></div>

@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { Admin } from '../../core/services/admin/admin';
+import { AdminNav } from '../../shared/admin-nav/admin-nav';
 
 @Component({
   selector: 'app-users',
-  imports: [FormsModule, NgFor, NgIf],
+  imports: [FormsModule, NgFor, NgIf, AdminNav],
   templateUrl: './users.html',
   styleUrl: './users.css',
 })
