@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Dish = require("../models/Dish");
 const Category = require("../models/Category");
 const Restaurant = require("../models/Restaurant");
+const { saveImage } = require("../utils/imageStorage");
 
 const estProprietaireRestaurant = (restaurant, user) =>
   user.role === "admin" ||
@@ -69,7 +70,7 @@ exports.createDish = async (req, res, next) => {
       nom: req.body.nom,
       description: req.body.description,
       prix: req.body.prix,
-      image: req.body.image,
+      image: req.file ? await saveImage(req.file) : req.body.image,
       disponible: req.body.disponible,
       categorie: categorie._id,
       restaurant: restaurant._id
@@ -105,6 +106,9 @@ exports.updateDish = async (req, res, next) => {
     ["nom", "description", "prix", "image", "disponible"].forEach((champ) => {
       if (req.body[champ] !== undefined) dish[champ] = req.body[champ];
     });
+    if (req.file) {
+      dish.image = await saveImage(req.file);
+    }
     await dish.save();
     res.json(dish);
   } catch (error) {

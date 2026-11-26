@@ -1,12 +1,12 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Admin } from '../../core/services/admin/admin';
 import { AdminNav } from '../../shared/admin-nav/admin-nav';
 
 @Component({
   selector: 'app-categories',
-  imports: [FormsModule, NgFor, AdminNav],
+  imports: [FormsModule, NgFor, NgIf, AdminNav],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })

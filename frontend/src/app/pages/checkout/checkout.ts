@@ -1,14 +1,14 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { CartService } from '../../core/services/cart/cart';
 import { Auth } from '../../core/services/auth/auth';
 import { Order } from '../../core/services/order/order';
 
 @Component({
   selector: 'app-checkout',
-  imports: [FormsModule, NgIf],
+  imports: [FormsModule, NgFor, NgIf],
   templateUrl: './checkout.html',
   styleUrl: './checkout.css',
 })

@@ -11,6 +11,8 @@ import { CartService } from '../../core/services/cart/cart';
   styleUrl: './navbar.css',
 })
 export class Navbar {
+  menuOpen = false;
+
   constructor(public auth: Auth, public cart: CartService) {}
 
   get user() {
@@ -19,5 +21,13 @@ export class Navbar {
 
   get cartCount(): number {
     return this.cart.getCount();
+  }
+
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu(): void {
+    this.menuOpen = false;
   }
 }

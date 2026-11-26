@@ -4,10 +4,11 @@ import { NgFor, NgIf } from '@angular/common';
 import { Restaurant } from '../../core/services/restaurant/restaurant';
 import { Dish } from '../../core/services/dish/dish';
 import { CartService } from '../../core/services/cart/cart';
+import { ImageUrlPipe } from '../../core/pipes/image-url-pipe';
 
 @Component({
   selector: 'app-restaurant-details',
-  imports: [RouterLink, NgFor, NgIf],
+  imports: [RouterLink, NgFor, NgIf, ImageUrlPipe],
   templateUrl: './restaurant-details.html',
   styleUrl: './restaurant-details.css',
 })

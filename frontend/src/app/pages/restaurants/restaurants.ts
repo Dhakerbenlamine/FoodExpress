@@ -3,10 +3,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { Restaurant } from '../../core/services/restaurant/restaurant';
+import { ImageUrlPipe } from '../../core/pipes/image-url-pipe';
 
 @Component({
   selector: 'app-restaurants',
-  imports: [FormsModule, RouterLink, NgFor, NgIf],
+  imports: [FormsModule, RouterLink, NgFor, NgIf, ImageUrlPipe],
   templateUrl: './restaurants.html',
   styleUrl: './restaurants.css',
 })

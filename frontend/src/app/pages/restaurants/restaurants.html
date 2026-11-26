@@ -1,50 +1,60 @@
 <section class="container py-5">
-  <h1 class="h2 mb-4">Restaurants</h1>
-  <div class="card mb-4">
-    <div class="card-body row g-3">
+  <div class="page-heading">
+    <span class="text-uppercase small fw-bold text-success">À proximité</span>
+    <h1 class="h2 mt-1">Trouvez votre prochain coup de cœur</h1>
+    <p>Filtrez les restaurants et choisissez les saveurs qui vous font envie.</p>
+  </div>
+
+  <div class="card filter-panel mb-4">
+    <div class="card-body row g-3 align-items-end">
       <div class="col-md-4">
-        <label class="form-label">Nom</label>
-        <input class="form-control" [(ngModel)]="nom" (ngModelChange)="page=1">
+        <label class="form-label">Restaurant</label>
+        <input class="form-control" [(ngModel)]="nom" (ngModelChange)="page=1" placeholder="Nom du restaurant">
       </div>
       <div class="col-md-4">
-        <label class="form-label">Type de cuisine</label>
-        <input class="form-control" [(ngModel)]="typeCuisine" (ngModelChange)="page=1" placeholder="Pizza, Tunisien...">
+        <label class="form-label">Cuisine</label>
+        <input class="form-control" [(ngModel)]="typeCuisine" (ngModelChange)="page=1" placeholder="Pizza, tunisienne...">
       </div>
       <div class="col-md-2">
-        <label class="form-label">État</label>
+        <label class="form-label">Disponibilité</label>
         <select class="form-select" [(ngModel)]="isOpen" (ngModelChange)="page=1">
           <option value="">Tous</option>
           <option value="true">Ouverts</option>
           <option value="false">Fermés</option>
         </select>
       </div>
-      <div class="col-md-2 d-flex align-items-end">
-        <button class="btn btn-success w-100" (click)="load()">Filtrer</button>
-      </div>
+      <div class="col-md-2"><button class="btn btn-success w-100" (click)="load()"><i class="bi bi-sliders me-2"></i>Filtrer</button></div>
     </div>
   </div>
 
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-  <div *ngIf="loading" class="text-center py-5">Chargement...</div>
+  <div *ngIf="loading" class="text-center py-5 text-secondary"><span class="spinner-border spinner-border-sm me-2"></span>Recherche en cours...</div>
   <div class="row g-4" *ngIf="!loading">
     <div class="col-md-6 col-lg-4" *ngFor="let restaurant of restaurants">
       <article class="card restaurant-card h-100">
-        <div class="card-body">
-          <span class="badge" [class.text-bg-success]="restaurant.isOpen" [class.text-bg-secondary]="!restaurant.isOpen">
-            {{ restaurant.isOpen ? 'Ouvert' : 'Fermé' }}
-          </span>
-          <h2 class="h5 mt-2">{{ restaurant.nom }}</h2>
-          <p>{{ restaurant.description }}</p>
-          <p class="text-secondary small">{{ restaurant.adresse }}</p>
-          <a class="btn btn-outline-success" [routerLink]="['/restaurants', restaurant._id]">Voir le menu</a>
+        <img class="restaurant-photo" [src]="restaurant.image | imageUrl" [alt]="'Photo de ' + restaurant.nom">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge" [class.text-bg-success]="restaurant.isOpen" [class.text-bg-secondary]="!restaurant.isOpen">{{ restaurant.isOpen ? 'Ouvert' : 'Fermé' }}</span>
+            <span class="small text-secondary"><i class="bi bi-truck me-1"></i>{{ restaurant.fraisLivraison }} DT</span>
+          </div>
+          <h2 class="h5">{{ restaurant.nom }}</h2>
+          <p class="text-secondary flex-grow-1">{{ restaurant.description }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="small fw-semibold text-success">{{ restaurant.typeCuisine }}</span>
+            <a class="btn btn-outline-success" [routerLink]="['/restaurants', restaurant._id]">Voir le menu <i class="bi bi-arrow-right ms-1"></i></a>
+          </div>
         </div>
       </article>
     </div>
+    <div *ngIf="restaurants.length===0" class="col-12">
+      <div class="card card-body text-center py-5"><i class="bi bi-search display-6 text-success mb-2"></i><strong>Aucun restaurant trouvé</strong><span class="text-secondary">Essayez de modifier vos filtres.</span></div>
+    </div>
   </div>
 
-  <nav class="mt-4 d-flex justify-content-center gap-2">
-    <button class="btn btn-outline-success" (click)="changePage(page-1)" [disabled]="page<=1">Précédent</button>
-    <span class="btn btn-light disabled">Page {{ page }} / {{ totalPages }}</span>
-    <button class="btn btn-outline-success" (click)="changePage(page+1)" [disabled]="page>=totalPages">Suivant</button>
+  <nav class="mt-5 d-flex justify-content-center align-items-center gap-2" aria-label="Pagination">
+    <button class="btn btn-outline-success" (click)="changePage(page-1)" [disabled]="page<=1"><i class="bi bi-arrow-left me-1"></i>Précédent</button>
+    <span class="pagination-label">Page {{ page }} / {{ totalPages }}</span>
+    <button class="btn btn-outline-success" (click)="changePage(page+1)" [disabled]="page>=totalPages">Suivant<i class="bi bi-arrow-right ms-1"></i></button>
   </nav>
 </section>

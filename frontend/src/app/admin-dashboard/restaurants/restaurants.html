@@ -1,15 +1,36 @@
 <section class="container py-5">
   <app-admin-nav></app-admin-nav>
-  <h1 class="h2 mb-4">Gestion des restaurants</h1>
-  <div class="card"><div class="table-responsive"><table class="table mb-0">
-    <thead><tr><th>Nom</th><th>Type</th><th>Ouvert</th><th>Validation</th><th>Action</th></tr></thead>
-    <tbody><tr *ngFor="let restaurant of restaurants">
-      <td>{{ restaurant.nom }}</td><td>{{ restaurant.typeCuisine }}</td><td>{{ restaurant.isOpen ? 'Oui' : 'Non' }}</td>
-      <td>{{ restaurant.statutValidation }}</td>
-      <td>
-        <button *ngIf="restaurant.statutValidation==='suspendue'" class="btn btn-sm btn-success" (click)="setValidation(restaurant,'validee')">Valider</button>
-        <button *ngIf="restaurant.statutValidation==='validee'" class="btn btn-sm btn-outline-danger" (click)="setValidation(restaurant,'suspendue')">Suspendre</button>
-      </td>
-    </tr></tbody>
-  </table></div></div>
+  <div class="page-heading"><span class="text-uppercase small fw-bold text-success">Administration</span><h1 class="h2 mt-1">Restaurants</h1><p>Gérez leur visibilité et ajoutez une photo de présentation.</p></div>
+  <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table mb-0 restaurant-admin-table">
+        <thead><tr><th>Restaurant</th><th>Cuisine</th><th>Ouverture</th><th>Validation</th><th>Photo</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let restaurant of restaurants">
+            <td><strong>{{ restaurant.nom }}</strong><small class="d-block text-secondary">{{ restaurant.owner?.prenom }} {{ restaurant.owner?.nom }}</small></td>
+            <td>{{ restaurant.typeCuisine }}</td>
+            <td><span class="badge" [class.text-bg-success]="restaurant.isOpen" [class.text-bg-secondary]="!restaurant.isOpen">{{ restaurant.isOpen ? 'Ouvert' : 'Fermé' }}</span></td>
+            <td><span class="badge" [class.text-bg-success]="restaurant.statutValidation==='validee'" [class.text-bg-warning]="restaurant.statutValidation!=='validee'">{{ restaurant.statutValidation }}</span></td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <img class="photo-thumb" [src]="restaurant.image | imageUrl" [alt]="'Photo de ' + restaurant.nom">
+                <label class="btn btn-sm btn-light mb-0" [class.disabled]="uploadingId===restaurant._id">
+                  <i class="bi bi-camera"></i><span class="visually-hidden">Importer une photo</span>
+                  <input class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp" (change)="uploadPhoto($event,restaurant)">
+                </label>
+              </div>
+              <small *ngIf="uploadingId===restaurant._id" class="text-secondary">Importation...</small>
+            </td>
+            <td>
+              <button *ngIf="restaurant.statutValidation==='suspendue'" class="btn btn-sm btn-success" (click)="setValidation(restaurant,'validee')">Valider</button>
+              <button *ngIf="restaurant.statutValidation==='validee'" class="btn btn-sm btn-outline-danger" (click)="setValidation(restaurant,'suspendue')">Suspendre</button>
+              <span *ngIf="restaurant.statutValidation==='en_attente'" class="small text-secondary">Statut à corriger</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </section>

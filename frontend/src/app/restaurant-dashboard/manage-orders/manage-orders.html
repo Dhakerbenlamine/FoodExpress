@@ -1,21 +1,32 @@
 <section class="container py-5">
-  <h1 class="h2 mb-4">Gestion des commandes</h1>
+  <div class="page-heading"><span class="text-uppercase small fw-bold text-success">Espace restaurateur</span><h1 class="h2 mt-1">Gestion des commandes</h1><p>Suivez chaque commande et faites avancer sa préparation.</p></div>
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-  <div class="card mb-3" *ngFor="let order of orders">
-    <div class="card-body">
-      <div class="d-flex justify-content-between flex-wrap">
-        <div><strong>{{ order.client?.nom }} {{ order.client?.prenom }}</strong><p class="mb-1">{{ order.adresseLivraison }}</p></div>
-        <span class="badge text-bg-success h-50">{{ order.statut }}</span>
+  <article class="card order-card mb-3" *ngFor="let order of orders">
+    <div class="order-card-top">
+      <div class="flex-grow-1">
+        <span class="small text-secondary">Commande pour {{ order.restaurant?.nom }}</span>
+        <h2 class="h5 mb-1">{{ order.client?.prenom }} {{ order.client?.nom }}</h2>
+        <p class="small text-secondary mb-0"><i class="bi bi-geo-alt me-1"></i>{{ order.adresseLivraison }}</p>
       </div>
-      <p class="mb-1" *ngFor="let article of order.articles">{{ article.quantite }} × {{ article.nom }}</p>
-      <strong>Total : {{ order.total }} DT</strong>
-      <div class="d-flex gap-2 mt-3" *ngIf="order.statut==='en_attente'">
-        <button class="btn btn-success" (click)="changeStatus(order,'acceptee')">Accepter</button>
-        <button class="btn btn-outline-danger" (click)="changeStatus(order,'annulee')">Refuser</button>
-      </div>
-      <button *ngIf="order.statut==='acceptee'" class="btn btn-primary mt-3" (click)="changeStatus(order,'en_preparation')">Passer en préparation</button>
-      <button *ngIf="order.statut==='en_preparation'" class="btn btn-primary mt-3" (click)="changeStatus(order,'en_livraison')">Passer en livraison</button>
-      <button *ngIf="order.statut==='en_livraison'" class="btn btn-success mt-3" (click)="changeStatus(order,'livree')">Marquer livrée</button>
+      <span class="badge status-badge">{{ order.statut }}</span>
     </div>
+    <div class="card-body">
+      <div class="order-lines">
+        <p class="mb-2" *ngFor="let article of order.articles"><span>{{ article.quantite }} × {{ article.nom }}</span><strong>{{ article.prixUnitaire * article.quantite }} DT</strong></p>
+      </div>
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+        <strong class="order-total">Total : {{ order.total }} DT</strong>
+        <div class="d-flex gap-2 flex-wrap" *ngIf="order.statut==='en_attente'">
+          <button class="btn btn-success" (click)="changeStatus(order,'acceptee')"><i class="bi bi-check-lg me-1"></i>Accepter</button>
+          <button class="btn btn-outline-danger" (click)="changeStatus(order,'annulee')">Refuser</button>
+        </div>
+        <button *ngIf="order.statut==='acceptee'" class="btn btn-success" (click)="changeStatus(order,'en_preparation')"><i class="bi bi-fire me-2"></i>Passer en préparation</button>
+        <button *ngIf="order.statut==='en_preparation'" class="btn btn-success" (click)="changeStatus(order,'en_livraison')"><i class="bi bi-bicycle me-2"></i>Passer en livraison</button>
+        <button *ngIf="order.statut==='en_livraison'" class="btn btn-success" (click)="changeStatus(order,'livree')"><i class="bi bi-check2-circle me-2"></i>Marquer livrée</button>
+      </div>
+    </div>
+  </article>
+  <div *ngIf="!error && orders.length===0" class="card empty-state text-center">
+    <i class="bi bi-inbox display-5 text-success"></i><h2 class="h5 mt-3">Aucune commande à traiter</h2><p class="text-secondary mb-0">Les nouvelles commandes apparaîtront ici.</p>
   </div>
 </section>

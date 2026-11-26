@@ -1,25 +1,28 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
   <div class="container">
-    <a class="navbar-brand fw-bold" routerLink="/">FoodExpress</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" routerLink="/">
+      <span class="brand-mark"><i class="bi bi-egg-fried"></i></span>
+      <span>Food<span class="text-warning">Express</span></span>
+    </a>
+    <button class="navbar-toggler" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen" aria-controls="mainNavigation" aria-label="Ouvrir le menu">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="mainNavigation">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/restaurants" routerLinkActive="active">Restaurants</a></li>
+    <div class="collapse navbar-collapse" [class.show]="menuOpen" id="mainNavigation">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+        <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()"><i class="bi bi-house-door me-1"></i>Accueil</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/restaurants" routerLinkActive="active" (click)="closeMenu()"><i class="bi bi-shop me-1"></i>Restaurants</a></li>
       </ul>
-      <div class="d-flex gap-2 align-items-center">
-        <a class="btn btn-outline-light position-relative" routerLink="/cart">
-          <i class="bi bi-cart3"></i> Panier
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <a class="btn btn-outline-light position-relative" routerLink="/cart" aria-label="Ouvrir le panier" (click)="closeMenu()">
+          <i class="bi bi-bag me-1"></i>Panier
           <span class="badge text-bg-warning ms-1">{{ cartCount }}</span>
         </a>
-        <a *ngIf="!user" class="btn btn-light" routerLink="/login">Connexion</a>
-        <a *ngIf="!user" class="btn btn-outline-light" routerLink="/register">Inscription</a>
-        <a *ngIf="user" class="btn btn-outline-light" routerLink="/my-orders">Mes commandes</a>
-        <a *ngIf="user?.role==='restaurateur' || user?.role==='admin'" class="btn btn-warning" routerLink="/restaurant-dashboard">Gestion</a>
-        <a *ngIf="user?.role==='admin'" class="btn btn-outline-warning" routerLink="/admin-dashboard/users">Admin</a>
-        <a *ngIf="user" class="btn btn-light" routerLink="/profile">{{ user.prenom }}</a>
+        <a *ngIf="!user" class="btn btn-light" routerLink="/login" (click)="closeMenu()">Connexion</a>
+        <a *ngIf="!user" class="btn btn-warning" routerLink="/register" (click)="closeMenu()">Créer un compte</a>
+        <a *ngIf="user" class="btn btn-outline-light" routerLink="/my-orders" (click)="closeMenu()">Mes commandes</a>
+        <a *ngIf="user?.role==='restaurateur' || user?.role==='admin'" class="btn btn-warning" routerLink="/restaurant-dashboard" (click)="closeMenu()">Gestion</a>
+        <a *ngIf="user?.role==='admin'" class="btn btn-outline-warning" routerLink="/admin-dashboard/users" (click)="closeMenu()">Administration</a>
+        <a *ngIf="user" class="btn btn-light" routerLink="/profile" (click)="closeMenu()"><i class="bi bi-person-circle me-1"></i>{{ user.prenom }}</a>
       </div>
     </div>
   </div>

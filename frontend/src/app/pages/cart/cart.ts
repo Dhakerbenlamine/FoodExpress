@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { CartService, CartItem } from '../../core/services/cart/cart';
+import { ImageUrlPipe } from '../../core/pipes/image-url-pipe';
 
 @Component({
   selector: 'app-cart',
-  imports: [RouterLink, NgFor, NgIf],
+  imports: [RouterLink, NgFor, NgIf, ImageUrlPipe],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })

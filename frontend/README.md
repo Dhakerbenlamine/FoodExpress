@@ -1,59 +1,32 @@
-# Frontend
+# FoodExpress
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.29.
+## Démarrage local
 
-## Development server
+Dans un premier terminal, démarrez l’API :
 
-To start a local development server, run:
-
-```bash
-ng serve
+```powershell
+cd ..\backend
+npm install
+npm run dev
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Dans un second terminal, démarrez Angular :
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```powershell
+npm install
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+L’application est disponible sur `http://127.0.0.1:4200/` et l’API sur `http://localhost:3000/`.
 
-```bash
-ng generate --help
+## Photos des restaurants et des plats
+
+Un administrateur peut importer la photo d’un restaurant depuis **Administration > Restaurants**. Un restaurateur peut importer la photo de son restaurant et de ses plats depuis **Gestion > Plats**.
+
+Les formats JPEG, PNG et WEBP sont acceptés jusqu’à 5 Mo. Les fichiers sont stockés dans `backend/uploads/`; le champ `image` de MongoDB contient leur chemin public. Le dossier est ignoré par Git afin de ne pas versionner les photos téléversées.
+
+## Compilation
+
+```powershell
+npm run build
 ```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

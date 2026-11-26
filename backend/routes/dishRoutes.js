@@ -2,6 +2,7 @@ const express = require("express");
 const { body, param, validationResult } = require("express-validator");
 const authMiddleware = require("../middleware/authMiddleware");
 const roleMiddleware = require("../middleware/roleMiddleware");
+const imageUploadMiddleware = require("../middleware/imageUploadMiddleware");
 const dishController = require("../controllers/dishController");
 
 const router = express.Router();
@@ -20,6 +21,7 @@ router.post(
   "/",
   authMiddleware,
   roleMiddleware("restaurateur", "admin"),
+  imageUploadMiddleware,
   [
     body("nom").trim().notEmpty().withMessage("Le nom du plat est obligatoire"),
     body("prix").isFloat({ min: 0 }).withMessage("Le prix est invalide"),
@@ -35,6 +37,7 @@ router.put(
   "/:id",
   authMiddleware,
   roleMiddleware("restaurateur", "admin"),
+  imageUploadMiddleware,
   [
     param("id").isMongoId().withMessage("Identifiant plat invalide"),
     body("prix").optional().isFloat({ min: 0 }).withMessage("Le prix est invalide"),

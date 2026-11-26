@@ -3,10 +3,11 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { Restaurant } from '../../core/services/restaurant/restaurant';
+import { ImageUrlPipe } from '../../core/pipes/image-url-pipe';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, FormsModule, NgFor, NgIf],
+  imports: [RouterLink, FormsModule, NgFor, NgIf, ImageUrlPipe],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

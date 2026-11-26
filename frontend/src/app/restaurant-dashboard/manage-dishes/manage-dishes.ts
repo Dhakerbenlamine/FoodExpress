@@ -1,13 +1,15 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { RestaurantDashboard } from '../../core/services/restaurant-dashboard/restaurant-dashboard';
 import { Auth } from '../../core/services/auth/auth';
 import { Admin } from '../../core/services/admin/admin';
+import { ImageUrlPipe } from '../../core/pipes/image-url-pipe';
 
 @Component({
   selector: 'app-manage-dishes',
-  imports: [FormsModule, NgFor, NgIf],
+  imports: [FormsModule, NgFor, NgIf, RouterLink, ImageUrlPipe],
   templateUrl: './manage-dishes.html',
   styleUrl: './manage-dishes.css',
 })
@@ -18,21 +20,26 @@ export class ManageDishes {
   private readonly changeDetector = inject(ChangeDetectorRef);
   dishes: any[] = [];
   categories: any[] = [];
+  restaurant: any = null;
   restaurantId = '';
   editingId = '';
   message = '';
-  form: any = { nom: '', prix: 0, categorie: '', disponible: true };
+  imageFile: File | null = null;
+  imagePreview = '';
+  restaurantPhotoMessage = '';
+  form: any = { nom: '', prix: 0, categorie: '', disponible: true, description: '' };
 
   constructor() {
-    const userId = this.auth.getUser()?.id;
+    const user = this.auth.getUser();
     this.service.getRestaurants().subscribe({
       next: (result) => {
         const restaurants = result.restaurants || [];
         const owned = restaurants.find((restaurant: any) => {
           const ownerId = typeof restaurant.owner === 'object' ? restaurant.owner._id : restaurant.owner;
-          return ownerId === userId;
+          return ownerId === user?.id;
         });
-        this.restaurantId = owned?._id || restaurants[0]?._id || '';
+        this.restaurant = owned || (user?.role === 'admin' ? restaurants[0] : null) || null;
+        this.restaurantId = this.restaurant?._id || '';
         this.changeDetector.markForCheck();
         if (this.restaurantId) this.load();
       }
@@ -59,14 +66,29 @@ export class ManageDishes {
       this.message = 'Sélectionnez une catégorie et renseignez le nom.';
       return;
     }
-    const data = { ...this.form, restaurant: this.restaurantId };
+    const data: any = { ...this.form, restaurant: this.restaurantId };
+    if (this.imageFile) {
+      const payload = new FormData();
+      Object.entries(data).forEach(([key, value]) => payload.append(key, String(value)));
+      payload.append('image', this.imageFile);
+      this.sendDish(payload);
+      return;
+    }
+
+    this.sendDish(data);
+  }
+
+  private sendDish(data: object): void {
     const request = this.editingId
       ? this.service.updateDish(this.editingId, data)
       : this.service.createDish(data);
     request.subscribe({
       next: () => {
         this.editingId = '';
-        this.form = { nom: '', prix: 0, categorie: '', disponible: true };
+        this.form = { nom: '', prix: 0, categorie: '', disponible: true, description: '' };
+        this.imageFile = null;
+        this.clearImagePreview();
+        this.message = 'Le plat a été enregistré.';
         this.changeDetector.markForCheck();
         this.load();
       },
@@ -81,10 +103,60 @@ export class ManageDishes {
     this.editingId = dish._id;
     this.form = {
       nom: dish.nom,
+      description: dish.description || '',
       prix: dish.prix,
       categorie: dish.categorie?._id || dish.categorie,
       disponible: dish.disponible
     };
+    this.imageFile = null;
+    this.clearImagePreview();
+    this.imagePreview = dish.image || '';
+  }
+
+  selectDishImage(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    this.clearImagePreview();
+    this.imageFile = file;
+    this.imagePreview = URL.createObjectURL(file);
+    this.message = '';
+  }
+
+  uploadRestaurantImage(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file || !this.restaurantId) return;
+
+    const payload = new FormData();
+    payload.append('image', file);
+    this.restaurantPhotoMessage = '';
+    this.service.updateRestaurant(this.restaurantId, payload).subscribe({
+      next: (restaurant) => {
+        this.restaurant = restaurant;
+        this.restaurantPhotoMessage = 'Photo du restaurant mise à jour.';
+        input.value = '';
+        this.changeDetector.markForCheck();
+      },
+      error: (error) => {
+        this.restaurantPhotoMessage = error.error?.message || 'Impossible de modifier la photo.';
+        input.value = '';
+        this.changeDetector.markForCheck();
+      }
+    });
+  }
+
+  cancelEdit(): void {
+    this.editingId = '';
+    this.form = { nom: '', prix: 0, categorie: '', disponible: true, description: '' };
+    this.imageFile = null;
+    this.clearImagePreview();
+    this.message = '';
+  }
+
+  private clearImagePreview(): void {
+    if (this.imagePreview.startsWith('blob:')) URL.revokeObjectURL(this.imagePreview);
+    this.imagePreview = '';
   }
 
   remove(dish: any): void {

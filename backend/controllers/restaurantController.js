@@ -3,6 +3,7 @@ const Category = require("../models/Category");
 const Dish = require("../models/Dish");
 const Order = require("../models/Order");
 const mongoose = require("mongoose");
+const { saveImage } = require("../utils/imageStorage");
 
 exports.getRestaurants = async (req, res, next) => {
   try {
@@ -106,7 +107,7 @@ exports.createRestaurant = async (req, res, next) => {
       description: req.body.description,
       adresse: req.body.adresse,
       typeCuisine: req.body.typeCuisine,
-      image: req.body.image,
+      image: req.file ? await saveImage(req.file) : req.body.image,
       fraisLivraison: req.body.fraisLivraison,
       horaires: req.body.horaires,
       isOpen: req.body.isOpen,
@@ -147,6 +148,9 @@ exports.updateRestaurant = async (req, res, next) => {
     champsAutorises.forEach((champ) => {
       if (req.body[champ] !== undefined) restaurant[champ] = req.body[champ];
     });
+    if (req.file) {
+      restaurant.image = await saveImage(req.file);
+    }
 
     if (req.user.role === "admin" && req.body.statutValidation !== undefined) {
       restaurant.statutValidation = req.body.statutValidation;

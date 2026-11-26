@@ -1,38 +1,47 @@
-<div *ngIf="loading && !restaurant" class="container py-5 text-center">Chargement du restaurant...</div>
+<div *ngIf="loading && !restaurant" class="container py-5 text-center text-secondary"><span class="spinner-border spinner-border-sm me-2"></span>Chargement du restaurant...</div>
 <div *ngIf="error && !restaurant" class="container py-5"><div class="alert alert-danger">{{ error }}</div></div>
 <section class="container py-5" *ngIf="restaurant">
-  <a class="btn btn-link px-0" routerLink="/restaurants">← Retour aux restaurants</a>
-  <header class="bg-white border rounded p-4 mb-4">
-    <div class="d-flex justify-content-between flex-wrap gap-3">
-      <div>
-        <span class="badge" [class.text-bg-success]="restaurant.isOpen" [class.text-bg-secondary]="!restaurant.isOpen">
-          {{ restaurant.isOpen ? 'Ouvert' : 'Fermé' }}
-        </span>
-        <h1 class="h2 mt-2">{{ restaurant.nom }}</h1>
-        <p class="mb-1">{{ restaurant.description }}</p>
-        <p class="text-secondary mb-0">{{ restaurant.adresse }} · {{ restaurant.horaires }}</p>
+  <a class="back-link d-inline-flex align-items-center gap-2 mb-4" routerLink="/restaurants"><i class="bi bi-arrow-left"></i>Retour aux restaurants</a>
+  <header class="restaurant-detail-hero card mb-5">
+    <img class="restaurant-detail-cover" [src]="restaurant.image | imageUrl" [alt]="'Photo de ' + restaurant.nom">
+    <div class="restaurant-detail-info">
+      <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+        <span class="badge" [class.text-bg-success]="restaurant.isOpen" [class.text-bg-secondary]="!restaurant.isOpen">{{ restaurant.isOpen ? 'Ouvert maintenant' : 'Fermé' }}</span>
+        <span class="badge bg-light text-success">{{ restaurant.typeCuisine }}</span>
       </div>
-      <div class="text-end">
-        <strong>Livraison : {{ restaurant.fraisLivraison }} DT</strong>
+      <h1 class="display-6 fw-bold">{{ restaurant.nom }}</h1>
+      <p class="text-secondary">{{ restaurant.description }}</p>
+      <div class="d-flex flex-wrap gap-3 small text-secondary">
+        <span><i class="bi bi-geo-alt text-success me-1"></i>{{ restaurant.adresse }}</span>
+        <span><i class="bi bi-clock text-success me-1"></i>{{ restaurant.horaires }}</span>
+        <span><i class="bi bi-truck text-success me-1"></i>{{ restaurant.fraisLivraison }} DT de livraison</span>
       </div>
     </div>
   </header>
 
-  <div *ngIf="message" class="alert alert-info">{{ message }}</div>
+  <div *ngIf="message" class="alert alert-success"><i class="bi bi-check-circle me-2"></i>{{ message }}</div>
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-  <h2 class="h4 mb-3">Menu</h2>
+  <div class="page-heading">
+    <span class="text-uppercase small fw-bold text-success">Fait maison</span>
+    <h2 class="h2 mt-1">Le menu</h2>
+    <p>Choisissez vos plats préférés et ajoutez-les au panier.</p>
+  </div>
   <div class="row g-4">
     <div class="col-12 col-md-6 col-lg-4" *ngFor="let dish of dishes">
       <article class="card dish-card h-100">
+        <img class="dish-photo" [src]="dish.image | imageUrl" [alt]="'Photo de ' + dish.nom">
         <div class="card-body d-flex flex-column">
-          <h3 class="h5">{{ dish.nom }}</h3>
+          <div class="d-flex justify-content-between gap-2 align-items-start">
+            <h3 class="h5">{{ dish.nom }}</h3>
+            <span class="price-tag">{{ dish.prix }} DT</span>
+          </div>
           <p class="text-secondary flex-grow-1">{{ dish.description }}</p>
-          <p class="fw-bold">{{ dish.prix }} DT</p>
-          <button class="btn btn-success" [disabled]="!dish.disponible" (click)="addToCart(dish)">
-            {{ dish.disponible ? 'Ajouter au panier' : 'Indisponible' }}
+          <button class="btn btn-success w-100" [disabled]="!dish.disponible || !restaurant.isOpen" (click)="addToCart(dish)">
+            <i class="bi bi-bag-plus me-2"></i>{{ !restaurant.isOpen ? 'Restaurant fermé' : (dish.disponible ? 'Ajouter au panier' : 'Indisponible') }}
           </button>
         </div>
       </article>
     </div>
+    <div *ngIf="dishes.length===0" class="col-12"><div class="card card-body text-secondary">Le menu sera bientôt disponible.</div></div>
   </div>
 </section>

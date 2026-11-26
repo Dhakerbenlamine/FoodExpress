@@ -23,6 +23,10 @@ export class Admin {
     return this.http.put(`${this.api}/restaurants/${id}/validation`, { statutValidation });
   }
 
+  updateRestaurant(id: string, data: object): Observable<any> {
+    return this.http.put(`${this.api}/restaurants/${id}`, data);
+  }
+
   getStats(): Observable<any> {
     return this.http.get(`${this.api}/admin/stats`);
   }

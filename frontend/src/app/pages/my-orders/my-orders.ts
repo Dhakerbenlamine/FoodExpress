@@ -1,10 +1,12 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Order } from '../../core/services/order/order';
+import { ImageUrlPipe } from '../../core/pipes/image-url-pipe';
 
 @Component({
   selector: 'app-my-orders',
-  imports: [NgFor, NgIf],
+  imports: [NgFor, NgIf, RouterLink, ImageUrlPipe],
   templateUrl: './my-orders.html',
   styleUrl: './my-orders.css',
 })

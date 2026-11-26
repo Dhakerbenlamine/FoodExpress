@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const connectDatabase = require("./config/database");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -27,6 +28,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads"), { maxAge: "1d" }));
 
 app.get("/api/health", (req, res) => {
   res.json({ message: "FoodExpress API opérationnelle" });

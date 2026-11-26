@@ -1,19 +1,30 @@
 <section class="container py-5">
   <app-admin-nav></app-admin-nav>
-  <h1 class="h2 mb-4">Gestion des utilisateurs</h1>
+  <div class="page-heading"><span class="text-uppercase small fw-bold text-success">Administration</span><h1 class="h2 mt-1">Utilisateurs</h1><p>Recherchez les comptes et gérez leur accès à la plateforme.</p></div>
   <div *ngIf="message" class="alert alert-success">{{ message }}</div>
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-  <div class="input-group mb-4">
-    <input class="form-control" [(ngModel)]="search" placeholder="Rechercher par nom ou email">
-    <button class="btn btn-success" (click)="load()">Rechercher</button>
+  <div class="card mb-4">
+    <div class="card-body d-flex gap-2 flex-wrap">
+      <label class="visually-hidden" for="user-search">Nom ou adresse e-mail</label>
+      <input id="user-search" class="form-control flex-grow-1" [(ngModel)]="search" placeholder="Rechercher par nom ou email">
+      <button class="btn btn-success" (click)="load()"><i class="bi bi-search me-2"></i>Rechercher</button>
+    </div>
   </div>
-  <div class="table-responsive card">
-    <table class="table mb-0"><thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Actif</th><th>Action</th></tr></thead>
-      <tbody><tr *ngFor="let user of users">
-        <td>{{ user.nom }} {{ user.prenom }}</td><td>{{ user.email }}</td><td>{{ user.role }}</td>
-        <td><span class="badge" [class.text-bg-success]="user.isActive" [class.text-bg-danger]="!user.isActive">{{ user.isActive ? 'Oui' : 'Non' }}</span></td>
-        <td><button class="btn btn-sm" [class.btn-outline-danger]="user.isActive" [class.btn-outline-success]="!user.isActive" [disabled]="pendingUserId===user._id" (click)="toggle(user)">{{ pendingUserId===user._id ? 'Mise à jour...' : (user.isActive ? 'Désactiver' : 'Activer') }}</button></td>
-      </tr></tbody>
-    </table>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead><tr><th>Utilisateur</th><th>Email</th><th>Rôle</th><th>État</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td><strong>{{ user.prenom }} {{ user.nom }}</strong></td>
+            <td>{{ user.email }}</td>
+            <td><span class="badge bg-light text-success">{{ user.role }}</span></td>
+            <td><span class="badge" [class.text-bg-success]="user.isActive" [class.text-bg-danger]="!user.isActive">{{ user.isActive ? 'Actif' : 'Désactivé' }}</span></td>
+            <td><button class="btn btn-sm" [class.btn-outline-danger]="user.isActive" [class.btn-outline-success]="!user.isActive" [disabled]="pendingUserId===user._id" (click)="toggle(user)">{{ pendingUserId===user._id ? 'Mise à jour...' : (user.isActive ? 'Désactiver' : 'Réactiver') }}</button></td>
+          </tr>
+          <tr *ngIf="users.length===0"><td colspan="5" class="text-center text-secondary py-5">Aucun utilisateur trouvé.</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>

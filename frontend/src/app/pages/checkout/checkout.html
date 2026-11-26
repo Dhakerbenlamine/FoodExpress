@@ -1,21 +1,26 @@
 <section class="container py-5">
-  <h1 class="h2 mb-4">Confirmation de commande</h1>
+  <div class="page-heading">
+    <span class="text-uppercase small fw-bold text-success">Dernière étape</span>
+    <h1 class="h2 mt-1">Finaliser la commande</h1>
+    <p>Renseignez vos informations de livraison et confirmez votre sélection.</p>
+  </div>
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
   <div class="row g-4">
     <div class="col-lg-7">
       <div class="card">
         <div class="card-body">
+          <h2 class="h5 mb-4"><i class="bi bi-geo-alt text-success me-2"></i>Informations de livraison</h2>
           <div class="mb-3">
-            <label class="form-label">Adresse de livraison</label>
-            <input class="form-control" [(ngModel)]="adresseLivraison" name="adresse" required>
+            <label class="form-label" for="delivery-address">Adresse de livraison</label>
+            <input id="delivery-address" class="form-control" [(ngModel)]="adresseLivraison" name="adresse" placeholder="Rue, numéro, ville" required>
           </div>
           <div class="mb-3">
-            <label class="form-label">Remarque</label>
-            <textarea class="form-control" [(ngModel)]="remarque" name="remarque" rows="3"></textarea>
+            <label class="form-label" for="delivery-note">Remarque <span class="fw-normal text-secondary">(facultatif)</span></label>
+            <textarea id="delivery-note" class="form-control" [(ngModel)]="remarque" name="remarque" rows="3" placeholder="Instructions pour le livreur..."></textarea>
           </div>
           <div>
-            <label class="form-label">Mode de paiement</label>
-            <select class="form-select" [(ngModel)]="modePaiement" name="modePaiement">
+            <label class="form-label" for="payment-mode">Mode de paiement</label>
+            <select id="payment-mode" class="form-select" [(ngModel)]="modePaiement" name="modePaiement">
               <option value="livraison">Paiement à la livraison</option>
               <option value="en_ligne">Paiement en ligne</option>
             </select>
@@ -24,12 +29,17 @@
       </div>
     </div>
     <div class="col-lg-5">
-      <div class="card">
+      <div class="card summary-card">
         <div class="card-body">
-          <h2 class="h5">Récapitulatif</h2>
+          <h2 class="h5 mb-4">Votre commande</h2>
+          <div class="d-flex justify-content-between mb-2" *ngFor="let item of items">
+            <span class="text-secondary">{{ item.quantite }} × {{ item.nom }}</span><strong>{{ item.prix * item.quantite }} DT</strong>
+          </div>
+          <hr>
           <div class="d-flex justify-content-between"><span>Sous-total</span><strong>{{ sousTotal }} DT</strong></div>
+          <p class="small text-secondary mt-2">Le total final, frais de livraison inclus, sera calculé par le serveur.</p>
           <button class="btn btn-success w-100 mt-3" (click)="confirm()" [disabled]="loading || !adresseLivraison.trim()">
-            {{ loading ? 'Confirmation...' : 'Confirmer la commande' }}
+            <i class="bi bi-check2-circle me-2"></i>{{ loading ? 'Confirmation...' : 'Confirmer la commande' }}
           </button>
         </div>
       </div>

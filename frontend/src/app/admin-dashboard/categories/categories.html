@@ -1,15 +1,19 @@
 <section class="container py-5">
   <app-admin-nav></app-admin-nav>
-  <h1 class="h2 mb-4">Gestion des catégories</h1>
-  <div class="card mb-4"><div class="card-body row g-3">
-    <div class="col-md-4"><select class="form-select" [(ngModel)]="restaurantId"><option value="">Restaurant</option><option *ngFor="let restaurant of restaurants" [value]="restaurant._id">{{ restaurant.nom }}</option></select></div>
-    <div class="col-md-4"><input class="form-control" [(ngModel)]="nom" placeholder="Nom de la catégorie"></div>
-    <div class="col-md-4"><button class="btn btn-success w-100" (click)="save()">Ajouter</button></div>
-  </div></div>
-  <ul class="list-group">
-    <li class="list-group-item d-flex justify-content-between" *ngFor="let category of categories">
-      <span>{{ category.nom }}</span>
-      <button class="btn btn-sm btn-outline-danger" (click)="remove(category)">Supprimer</button>
-    </li>
-  </ul>
+  <div class="page-heading"><span class="text-uppercase small fw-bold text-success">Administration</span><h1 class="h2 mt-1">Catégories de cuisine</h1><p>Organisez les menus par restaurant pour faciliter la navigation.</p></div>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-5"><label class="form-label" for="category-restaurant">Restaurant</label><select id="category-restaurant" class="form-select" [(ngModel)]="restaurantId" (ngModelChange)="load()"><option value="">Tous les restaurants</option><option *ngFor="let restaurant of restaurants" [value]="restaurant._id">{{ restaurant.nom }}</option></select></div>
+        <div class="col-md-5"><label class="form-label" for="category-name">Nouvelle catégorie</label><input id="category-name" class="form-control" [(ngModel)]="nom" placeholder="Ex. Desserts"></div>
+        <div class="col-md-2"><button class="btn btn-success w-100" (click)="save()"><i class="bi bi-plus-lg me-1"></i>Ajouter</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="row g-3">
+    <div class="col-md-6 col-lg-4" *ngFor="let category of categories">
+      <div class="card category-card h-100"><div class="card-body d-flex align-items-center justify-content-between gap-3"><div><span class="category-icon"><i class="bi bi-grid"></i></span><h2 class="h6 mt-3 mb-1">{{ category.nom }}</h2><small class="text-secondary">{{ category.restaurant?.nom }}</small></div><button class="btn btn-light text-danger" aria-label="Supprimer la catégorie" (click)="remove(category)"><i class="bi bi-trash"></i></button></div></div>
+    </div>
+    <div *ngIf="categories.length===0" class="col-12"><div class="card card-body text-center text-secondary py-5">Aucune catégorie pour cette sélection.</div></div>
+  </div>
 </section>

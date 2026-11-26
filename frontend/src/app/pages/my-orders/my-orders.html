@@ -1,17 +1,36 @@
 <section class="container py-5">
-  <h1 class="h2 mb-4">Mes commandes</h1>
-  <div *ngIf="loading">Chargement...</div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-  <div class="card mb-3" *ngFor="let order of orders">
-    <div class="card-body">
-      <div class="d-flex justify-content-between flex-wrap gap-2">
-        <h2 class="h5 mb-0">{{ order.restaurant?.nom || 'Restaurant' }}</h2>
-        <span class="badge text-bg-success">{{ order.statut }}</span>
-      </div>
-      <p class="mt-2 mb-1">Adresse : {{ order.adresseLivraison }}</p>
-      <p class="mb-1" *ngFor="let article of order.articles">{{ article.quantite }} × {{ article.nom }} · {{ article.prixUnitaire }} DT</p>
-      <strong>Total : {{ order.total }} DT</strong>
-    </div>
+  <div class="page-heading">
+    <span class="text-uppercase small fw-bold text-success">Suivez vos commandes</span>
+    <h1 class="h2 mt-1">Mon historique</h1>
+    <p>Retrouvez les détails et l’avancement de vos commandes.</p>
   </div>
-  <div *ngIf="!loading && !error && orders.length===0" class="alert alert-light border">Aucune commande.</div>
+  <div *ngIf="loading" class="text-center py-5 text-secondary"><span class="spinner-border spinner-border-sm me-2"></span>Chargement de vos commandes...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <article class="card order-card mb-3" *ngFor="let order of orders">
+    <div class="order-card-top">
+      <img class="order-restaurant-photo" [src]="order.restaurant?.image | imageUrl" [alt]="'Photo de ' + (order.restaurant?.nom || 'restaurant')">
+      <div class="flex-grow-1">
+        <span class="small text-secondary">Commande passée</span>
+        <h2 class="h5 mb-0">{{ order.restaurant?.nom || 'Restaurant' }}</h2>
+      </div>
+      <span class="badge text-bg-success">{{ order.statut }}</span>
+    </div>
+    <div class="card-body">
+      <div class="order-lines">
+        <p class="mb-2" *ngFor="let article of order.articles">
+          <span>{{ article.quantite }} × {{ article.nom }}</span><strong>{{ article.prixUnitaire * article.quantite }} DT</strong>
+        </p>
+      </div>
+      <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mt-3">
+        <span class="small text-secondary"><i class="bi bi-geo-alt me-1"></i>{{ order.adresseLivraison }}</span>
+        <strong class="order-total">Total : {{ order.total }} DT</strong>
+      </div>
+    </div>
+  </article>
+  <div *ngIf="!loading && !error && orders.length===0" class="card empty-state text-center">
+    <i class="bi bi-receipt display-5 text-success"></i>
+    <h2 class="h5 mt-3">Aucune commande pour le moment</h2>
+    <p class="text-secondary">Vos prochaines commandes apparaîtront ici.</p>
+    <a class="btn btn-success align-self-center" routerLink="/restaurants">Découvrir les restaurants</a>
+  </div>
 </section>

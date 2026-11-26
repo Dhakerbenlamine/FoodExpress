@@ -1,21 +1,27 @@
-<section class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow-sm"><div class="card-body p-4">
-        <h1 class="h3 mb-4">Créer un compte</h1>
-        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-        <form (ngSubmit)="submit()">
-          <div class="row g-3">
-            <div class="col-md-6"><label class="form-label">Nom</label><input class="form-control" [(ngModel)]="nom" name="nom" required></div>
-            <div class="col-md-6"><label class="form-label">Prénom</label><input class="form-control" [(ngModel)]="prenom" name="prenom" required></div>
-            <div class="col-md-6"><label class="form-label">Email</label><input type="email" class="form-control" [(ngModel)]="email" name="email" required></div>
-            <div class="col-md-6"><label class="form-label">Téléphone</label><input class="form-control" [(ngModel)]="telephone" name="telephone" required></div>
-            <div class="col-md-6"><label class="form-label">Mot de passe</label><input type="password" class="form-control" [(ngModel)]="password" name="password" required></div>
-            <div class="col-md-6"><label class="form-label">Confirmation</label><input type="password" class="form-control" [(ngModel)]="confirmation" name="confirmation" required></div>
-          </div>
-          <button class="btn btn-success w-100 mt-4" type="submit">S'inscrire</button>
-        </form>
-      </div></div>
+<section class="container py-5 auth-page">
+  <div class="row justify-content-center align-items-stretch g-0 auth-card">
+    <div class="col-lg-5 auth-visual">
+      <img src="/food-placeholder.svg" alt="" class="auth-illustration">
+      <span class="badge rounded-pill bg-light text-success">Rejoignez-nous</span>
+      <h2 class="h2 text-white mt-3">Vos bonnes adresses vous attendent.</h2>
+      <p class="text-white-50 mb-0">Créez votre compte et commandez vos plats favoris en quelques instants.</p>
+    </div>
+    <div class="col-lg-7 auth-form">
+      <span class="text-uppercase small fw-bold text-success">Votre prochaine commande commence ici</span>
+      <h1 class="h2 mt-2 mb-4">Créer un compte</h1>
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <form (ngSubmit)="submit()">
+        <div class="row g-3">
+          <div class="col-md-6"><label class="form-label" for="register-nom">Nom</label><input id="register-nom" class="form-control" [(ngModel)]="nom" name="nom" autocomplete="family-name" required></div>
+          <div class="col-md-6"><label class="form-label" for="register-prenom">Prénom</label><input id="register-prenom" class="form-control" [(ngModel)]="prenom" name="prenom" autocomplete="given-name" required></div>
+          <div class="col-md-6"><label class="form-label" for="register-email">Email</label><input id="register-email" type="email" class="form-control" [(ngModel)]="email" name="email" autocomplete="email" required></div>
+          <div class="col-md-6"><label class="form-label" for="register-phone">Téléphone</label><input id="register-phone" class="form-control" [(ngModel)]="telephone" name="telephone" autocomplete="tel" required></div>
+          <div class="col-md-6"><label class="form-label" for="register-password">Mot de passe</label><input id="register-password" type="password" class="form-control" [(ngModel)]="password" name="password" autocomplete="new-password" required></div>
+          <div class="col-md-6"><label class="form-label" for="register-confirmation">Confirmation</label><input id="register-confirmation" type="password" class="form-control" [(ngModel)]="confirmation" name="confirmation" autocomplete="new-password" required></div>
+        </div>
+        <button class="btn btn-success w-100 mt-4" type="submit"><i class="bi bi-person-plus me-2"></i>S'inscrire</button>
+      </form>
+      <p class="mt-4 mb-0 text-center text-secondary">Déjà membre ? <a class="fw-semibold" routerLink="/login">Se connecter</a></p>
     </div>
   </div>
 </section>
