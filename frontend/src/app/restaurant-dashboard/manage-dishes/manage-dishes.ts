@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { RestaurantDashboard } from '../../core/services/restaurant-dashboard/restaurant-dashboard';
-import { Auth } from '../../core/services/auth/auth';
 import { Admin } from '../../core/services/admin/admin';
 import { ImageUrlPipe } from '../../core/pipes/image-url-pipe';
 
@@ -16,8 +15,8 @@ import { ImageUrlPipe } from '../../core/pipes/image-url-pipe';
 export class ManageDishes {
   private readonly service = inject(RestaurantDashboard);
   private readonly admin = inject(Admin);
-  private readonly auth = inject(Auth);
   private readonly changeDetector = inject(ChangeDetectorRef);
+  restaurants: any[] = [];
   dishes: any[] = [];
   categories: any[] = [];
   restaurant: any = null;
@@ -30,20 +29,26 @@ export class ManageDishes {
   form: any = { nom: '', prix: 0, categorie: '', disponible: true, description: '' };
 
   constructor() {
-    const user = this.auth.getUser();
-    this.service.getRestaurants().subscribe({
+    this.service.getMyRestaurants().subscribe({
       next: (result) => {
-        const restaurants = result.restaurants || [];
-        const owned = restaurants.find((restaurant: any) => {
-          const ownerId = typeof restaurant.owner === 'object' ? restaurant.owner._id : restaurant.owner;
-          return ownerId === user?.id;
-        });
-        this.restaurant = owned || (user?.role === 'admin' ? restaurants[0] : null) || null;
-        this.restaurantId = this.restaurant?._id || '';
+        this.restaurants = result.restaurants || [];
+        this.selectRestaurant(this.restaurants[0]?._id || '');
         this.changeDetector.markForCheck();
-        if (this.restaurantId) this.load();
-      }
+      },
+      error: (error) => {
+        this.message = error.error?.message || 'Impossible de charger vos restaurants.';
+        this.changeDetector.markForCheck();
+      },
     });
+  }
+
+  selectRestaurant(restaurantId: string): void {
+    this.restaurant = this.restaurants.find((item) => item._id === restaurantId) || null;
+    this.restaurantId = this.restaurant?._id || '';
+    this.dishes = [];
+    this.categories = [];
+    this.cancelEdit();
+    if (this.restaurantId) this.load();
   }
 
   load(): void {
@@ -51,13 +56,21 @@ export class ManageDishes {
       next: (result) => {
         this.dishes = result.dishes || [];
         this.changeDetector.markForCheck();
-      }
+      },
+      error: (error) => {
+        this.message = error.error?.message || 'Impossible de charger les plats.';
+        this.changeDetector.markForCheck();
+      },
     });
     this.admin.getCategories(this.restaurantId).subscribe({
       next: (categories) => {
         this.categories = categories || [];
         this.changeDetector.markForCheck();
-      }
+      },
+      error: (error) => {
+        this.message = error.error?.message || 'Impossible de charger les catégories.';
+        this.changeDetector.markForCheck();
+      },
     });
   }
 

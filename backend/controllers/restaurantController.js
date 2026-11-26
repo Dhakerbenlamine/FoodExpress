@@ -42,6 +42,16 @@ exports.getRestaurants = async (req, res, next) => {
   }
 };
 
+exports.getMyRestaurants = async (req, res, next) => {
+  try {
+    const filtre = req.user.role === "admin" ? {} : { owner: req.user._id };
+    const restaurants = await Restaurant.find(filtre).sort({ nom: 1 });
+    res.json({ restaurants });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getAdminRestaurants = async (req, res, next) => {
   try {
     const page = Math.max(parseInt(req.query.page, 10) || 1, 1);

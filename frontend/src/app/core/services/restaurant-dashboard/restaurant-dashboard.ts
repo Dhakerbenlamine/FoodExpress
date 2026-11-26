@@ -39,6 +39,10 @@ export class RestaurantDashboard {
     return this.http.get(`${this.api}/restaurants`, { params: { limit: 100 } });
   }
 
+  getMyRestaurants(): Observable<any> {
+    return this.http.get(`${this.api}/restaurants/my-restaurants`);
+  }
+
   updateRestaurant(id: string, data: object): Observable<any> {
     return this.http.put(`${this.api}/restaurants/${id}`, data);
   }

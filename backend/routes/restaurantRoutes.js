@@ -16,6 +16,12 @@ const verifierErreurs = (req, res, next) => {
 };
 
 router.get("/", restaurantController.getRestaurants);
+router.get(
+  "/my-restaurants",
+  authMiddleware,
+  roleMiddleware("restaurateur", "admin"),
+  restaurantController.getMyRestaurants
+);
 router.get("/:id", restaurantController.getRestaurantById);
 
 router.post(
