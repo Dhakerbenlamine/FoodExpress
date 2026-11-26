@@ -14,9 +14,15 @@ export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authenticatedRequest).pipe(
     catchError((error) => {
-      if (error.status === 401) {
+      const compteDesactive =
+        error.status === 403 && error.error?.message === 'Compte désactivé';
+
+      if (error.status === 401 || compteDesactive) {
         auth.logout();
-        router.navigate(['/login']);
+        router.navigate(
+          ['/login'],
+          compteDesactive ? { queryParams: { reason: 'account-disabled' } } : undefined
+        );
       }
       return throwError(() => error);
     })

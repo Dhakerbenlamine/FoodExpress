@@ -18,6 +18,13 @@ export class Login {
   email = '';
   password = '';
   error = '';
+  notice = '';
+
+  constructor() {
+    if (this.route.snapshot.queryParamMap.get('reason') === 'account-disabled') {
+      this.notice = 'Votre compte a été désactivé par un administrateur. Contactez le support.';
+    }
+  }
 
   submit(): void {
     this.error = '';
