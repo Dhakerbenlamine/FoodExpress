@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
@@ -13,6 +13,7 @@ import { Restaurant } from '../../core/services/restaurant/restaurant';
 export class Restaurants implements OnInit {
   private readonly service = inject(Restaurant);
   private readonly route = inject(ActivatedRoute);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   nom = '';
   typeCuisine = '';
   isOpen = '';
@@ -20,6 +21,7 @@ export class Restaurants implements OnInit {
   totalPages = 1;
   restaurants: any[] = [];
   loading = false;
+  error = '';
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
@@ -31,6 +33,7 @@ export class Restaurants implements OnInit {
 
   load(): void {
     this.loading = true;
+    this.error = '';
     this.service.getAll({
       nom: this.nom,
       typeCuisine: this.typeCuisine,
@@ -42,8 +45,13 @@ export class Restaurants implements OnInit {
         this.restaurants = result.restaurants || [];
         this.totalPages = result.pagination?.pages || 1;
         this.loading = false;
+        this.changeDetector.markForCheck();
       },
-      error: () => { this.loading = false; }
+      error: (error) => {
+        this.loading = false;
+        this.error = error.error?.message || 'Impossible de charger les restaurants.';
+        this.changeDetector.markForCheck();
+      }
     });
   }
 

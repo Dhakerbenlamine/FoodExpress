@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { Admin } from '../../core/services/admin/admin';
 
@@ -10,11 +10,15 @@ import { Admin } from '../../core/services/admin/admin';
 })
 export class Restaurants {
   private readonly admin = inject(Admin);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   restaurants: any[] = [];
   constructor() { this.load(); }
   load(): void {
     this.admin.getRestaurants().subscribe({
-      next: (result) => { this.restaurants = result.restaurants || []; }
+      next: (result) => {
+        this.restaurants = result.restaurants || [];
+        this.changeDetector.markForCheck();
+      }
     });
   }
   setValidation(restaurant: any, statutValidation: 'validee' | 'suspendue'): void {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgIf } from '@angular/common';
@@ -15,6 +15,7 @@ export class Profile {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   nom = '';
   prenom = '';
   telephone = '';
@@ -28,8 +29,12 @@ export class Profile {
         this.nom = result.nom;
         this.prenom = result.prenom;
         this.telephone = result.telephone;
+        this.changeDetector.markForCheck();
       },
-      error: (error) => { this.error = error.error?.message || 'Profil indisponible.'; }
+      error: (error) => {
+        this.error = error.error?.message || 'Profil indisponible.';
+        this.changeDetector.markForCheck();
+      }
     });
   }
 
@@ -39,8 +44,14 @@ export class Profile {
       { nom: this.nom, prenom: this.prenom, telephone: this.telephone },
       { headers }
     ).subscribe({
-      next: (result) => { this.message = result.message; },
-      error: (error) => { this.error = error.error?.message || 'Modification impossible.'; }
+      next: (result) => {
+        this.message = result.message;
+        this.changeDetector.markForCheck();
+      },
+      error: (error) => {
+        this.error = error.error?.message || 'Modification impossible.';
+        this.changeDetector.markForCheck();
+      }
     });
   }
 

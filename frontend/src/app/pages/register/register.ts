@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
@@ -13,6 +13,7 @@ import { Auth } from '../../core/services/auth/auth';
 export class Register {
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   nom = '';
   prenom = '';
   email = '';
@@ -32,7 +33,10 @@ export class Register {
       confirmation: this.confirmation
     }).subscribe({
       next: () => this.router.navigate(['/']),
-      error: (error) => { this.error = error.error?.message || 'Inscription impossible.'; }
+      error: (error) => {
+        this.error = error.error?.message || 'Inscription impossible.';
+        this.changeDetector.markForCheck();
+      }
     });
   }
 }

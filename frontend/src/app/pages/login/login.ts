@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
@@ -14,6 +14,7 @@ export class Login {
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   email = '';
   password = '';
   error = '';
@@ -32,7 +33,10 @@ export class Login {
         else if (role === 'restaurateur') this.router.navigate(['/restaurant-dashboard']);
         else this.router.navigate(['/']);
       },
-      error: (error) => { this.error = error.error?.message || 'Connexion impossible.'; }
+      error: (error) => {
+        this.error = error.error?.message || 'Connexion impossible.';
+        this.changeDetector.markForCheck();
+      }
     });
   }
 }

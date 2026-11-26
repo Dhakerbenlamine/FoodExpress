@@ -24,6 +24,7 @@
     </div>
   </div>
 
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
   <div *ngIf="loading" class="text-center py-5">Chargement...</div>
   <div class="row g-4" *ngIf="!loading">
     <div class="col-md-6 col-lg-4" *ngFor="let restaurant of restaurants">

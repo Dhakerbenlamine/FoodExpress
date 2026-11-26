@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
@@ -13,6 +13,7 @@ import { Restaurant } from '../../core/services/restaurant/restaurant';
 export class Home implements OnInit {
   private readonly restaurantService = inject(Restaurant);
   private readonly router = inject(Router);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   restaurants: any[] = [];
   searchText = '';
   loading = true;
@@ -28,8 +29,12 @@ export class Home implements OnInit {
       next: (result) => {
         this.restaurants = result.restaurants || [];
         this.loading = false;
+        this.changeDetector.markForCheck();
       },
-      error: () => { this.loading = false; }
+      error: () => {
+        this.loading = false;
+        this.changeDetector.markForCheck();
+      }
     });
   }
 

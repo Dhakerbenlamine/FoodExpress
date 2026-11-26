@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
@@ -17,6 +17,7 @@ export class Checkout {
   private readonly auth = inject(Auth);
   private readonly orderService = inject(Order);
   private readonly router = inject(Router);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   adresseLivraison = '';
   remarque = '';
   modePaiement = 'livraison';
@@ -51,6 +52,7 @@ export class Checkout {
       error: (error) => {
         this.error = error.error?.message || 'Impossible de confirmer la commande.';
         this.loading = false;
+        this.changeDetector.markForCheck();
       }
     });
   }

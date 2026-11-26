@@ -1,3 +1,5 @@
+<div *ngIf="loading && !restaurant" class="container py-5 text-center">Chargement du restaurant...</div>
+<div *ngIf="error && !restaurant" class="container py-5"><div class="alert alert-danger">{{ error }}</div></div>
 <section class="container py-5" *ngIf="restaurant">
   <a class="btn btn-link px-0" routerLink="/restaurants">← Retour aux restaurants</a>
   <header class="bg-white border rounded p-4 mb-4">
@@ -17,6 +19,7 @@
   </header>
 
   <div *ngIf="message" class="alert alert-info">{{ message }}</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
   <h2 class="h4 mb-3">Menu</h2>
   <div class="row g-4">
     <div class="col-12 col-md-6 col-lg-4" *ngFor="let dish of dishes">

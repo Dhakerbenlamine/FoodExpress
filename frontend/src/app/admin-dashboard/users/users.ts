@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgFor } from '@angular/common';
 import { Admin } from '../../core/services/admin/admin';
@@ -11,12 +11,16 @@ import { Admin } from '../../core/services/admin/admin';
 })
 export class Users {
   private readonly admin = inject(Admin);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   users: any[] = [];
   search = '';
   constructor() { this.load(); }
   load(): void {
     this.admin.getUsers(this.search).subscribe({
-      next: (result) => { this.users = result.users || []; }
+      next: (result) => {
+        this.users = result.users || [];
+        this.changeDetector.markForCheck();
+      }
     });
   }
   toggle(user: any): void {
