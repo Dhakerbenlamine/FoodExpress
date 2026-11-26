@@ -5,6 +5,12 @@
   },
   "variable": [
     { "key": "baseUrl", "value": "http://localhost:3000/api" },
+    { "key": "clientEmail", "value": "" },
+    { "key": "clientPassword", "value": "" },
+    { "key": "ownerEmail", "value": "" },
+    { "key": "ownerPassword", "value": "" },
+    { "key": "adminEmail", "value": "" },
+    { "key": "adminPassword", "value": "" },
     { "key": "clientToken", "value": "" },
     { "key": "ownerToken", "value": "" },
     { "key": "adminToken", "value": "" },
@@ -21,7 +27,7 @@
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"restaurateur@foodexpress.local\",\n  \"password\": \"Restaurateur123!\"\n}"
+          "raw": "{\n  \"email\": \"{{ownerEmail}}\",\n  \"password\": \"{{ownerPassword}}\"\n}"
         },
         "url": "{{baseUrl}}/auth/login"
       }
@@ -47,7 +53,7 @@
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"client@foodexpress.local\",\n  \"password\": \"Client123!\"\n}"
+          "raw": "{\n  \"email\": \"{{clientEmail}}\",\n  \"password\": \"{{clientPassword}}\"\n}"
         },
         "url": "{{baseUrl}}/auth/login"
       }
@@ -117,6 +123,18 @@
         "method": "GET",
         "header": [{ "key": "Authorization", "value": "Bearer {{ownerToken}}" }],
         "url": "{{baseUrl}}/restaurant-stats"
+      }
+    },
+    {
+      "name": "Login admin",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+        },
+        "url": "{{baseUrl}}/auth/login"
       }
     },
     {
